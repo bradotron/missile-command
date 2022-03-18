@@ -30,6 +30,8 @@ After the package is installed, you need to add an URP asset.
     * Under `Projection` check that `Projection` is set to `Orthographic`
     * Set the `Size` to `10` - *the size represents the number of units up/down to the camera edges on the `Y` axis. i.e. the camera is on `(0,0)`, the top edge of the camera will be at `(x, 10)` and the bottom will be `(x, -10)`.*
     * Under `Environment` change the `Background Type` and `Background` to your desired settings
+* Add a light
+    * Right click in the hierarchy > Light > 2D > Global Light 2D
 
 ## Cinemachine
 * If you do not have the `Cinemachine` menu, install the `Cinemachine` package if you haven't yet

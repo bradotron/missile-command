@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class TargetCursor : MonoBehaviour
 {
-  private MousePositionTracker mousePositionTracker;
-  void Start()
-  {
-    mousePositionTracker = GetComponent<MousePositionTracker>();
-  }
-
   void Update()
   {
-    transform.position = mousePositionTracker.GetMouseWorldPosition();
+    transform.position = MousePositionTracker.Instance.GetMouseWorldPosition();
   }
 }

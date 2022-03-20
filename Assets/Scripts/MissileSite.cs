@@ -19,8 +19,7 @@ public class MissileSite : MonoBehaviour
   private void HandleLauncherRotation()
   {
     Vector3 mouseWorldPosition = MousePositionTracker.Instance.GetMouseWorldPosition();
-    Vector2 directionToMouse = (mouseWorldPosition - transform.position).normalized;
-    float angleDeg = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg;
+    float angleDeg = AngleMath.VectorAngle(mouseWorldPosition - launcherTransform.position);
     launcherTransform.eulerAngles = new Vector3(0, 0, angleDeg);
   }
 }

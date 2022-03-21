@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class TestTarget : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+  private WaypointNavigator waypointNavigator;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  private void Awake()
+  {
+    waypointNavigator = GetComponent<WaypointNavigator>();
+    waypointNavigator.SetRigidBody2d(GetComponent<Rigidbody2D>());
+    waypointNavigator.SetTargetSpeed(5f);
+  }
+
 }

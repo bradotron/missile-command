@@ -14,7 +14,7 @@ public class LineContainer : MonoBehaviour
     lineRenderers = new Dictionary<string, LineRenderer>();
   }
 
-  public void AddLine(string tag, Vector3 start, Vector3 end, float width, Color color)
+  public void AddLine(string tag, Vector3 start, Vector3 end, float width, Color color, Material material)
   {
     GameObject myLine = new GameObject();
     myLine.transform.position = start;
@@ -27,6 +27,7 @@ public class LineContainer : MonoBehaviour
     lr.positionCount = 2;
     lr.SetPosition(0, start);
     lr.SetPosition(0, end);
+    lr.material = material;
     lineRenderers.Add(tag, lr);
   }
 

@@ -7,8 +7,6 @@ public class StraightLineFollower : MonoBehaviour
   [SerializeField] private Vector2 start;
   [SerializeField] private float speed;
 
-  private float timer = 0f;
-
   private void Start()
   {
     transform.position = start;

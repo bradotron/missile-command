@@ -15,11 +15,14 @@ public class Missile : MonoBehaviour
   [SerializeField]
   private float torqueFactor = 1f;
 
-  private PID rotationController;
+  [SerializeField]
+  private float maxSpeed = 10f;
+
+  private PID angleController;
 
   [SerializeField]
   [Range(-10, 10)]
-  private float rotationControllerKp, rotationControllerKi, rotationControllerKd;
+  private float angleControllerKp, angleControllerKi, angleControllerKd;
 
   private PID angularVelocityController;
   [SerializeField]
@@ -27,71 +30,59 @@ public class Missile : MonoBehaviour
   private float angularVelocityControllerKp, angularVelocityControllerKi, angularVelocityControllerKd;
 
 
-  private string myVelocityTag = "myVelocity";
-  private string toTargetTag = "toTarget";
-  private string forwardLineTag = "forward";
+  [SerializeField]
+  private Material white;
 
-  [SerializeField]
-  private Material pinkMaterial;
-  [SerializeField]
-  private Material greenMaterial;
-  [SerializeField]
-  private Material redMaterial;
-
-  private float interceptTime = 0f;
   private bool isThrusting;
 
-  private PID alphaThrustController;
-  [SerializeField]
-  [Range(-10, 10)]
-  private float alphaThrustControllerKp, alphaThrustControllerKi, alphaThrustControllerKd;
+
+
+  // public float rightDotToTarget;
+  // public float toTargetDotRight;
   public float alpha;
-  public float velocity;
-  public float angularVelocity;
-  public float minSeenAngularVelocity = 0f;
-  public float maxSeenAngularVelocity = 0f;
+  private Vector2 previousLos;
+  private Vector2 los;
+  private Vector2 losDelta;
+  private Vector2 desiredRotation;
+
 
   private void Awake()
   {
     angularVelocityController = new PID(angularVelocityControllerKp, angularVelocityControllerKi, angularVelocityControllerKd);
-    rotationController = new PID(rotationControllerKp, rotationControllerKi, rotationControllerKd);
-    alphaThrustController = new PID(alphaThrustControllerKp, alphaThrustControllerKi, alphaThrustControllerKd);
+    angleController = new PID(angleControllerKp, angleControllerKi, angleControllerKd);
     rb2d = GetComponent<Rigidbody2D>();
   }
 
   private void Start()
   {
-    InitializeMyVelocity();
-    InitializetoTarget();
-    InitializeForward();
+    InitializeLines();
   }
 
   private void Update()
   {
-    angularVelocity = rb2d.angularVelocity;
-    velocity = rb2d.velocity.magnitude;
-
     HandleLineUpdates();
 
     UpdatePIDTerms();
-
-    if (Input.GetKeyDown(KeyCode.T))
-    {
-      isThrusting = true;
-    }
-
-    if (Input.GetKeyUp(KeyCode.T))
-    {
-      isThrusting = false;
-    }
   }
 
+  private Vector2 RadianToVector2(float radian)
+  {
+    return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
+  }
+
+  private void InitializeLines()
+  {
+    AddDebugLine("Forward", new Color(255, 0, 0));
+    AddDebugLine("Velocity", new Color(0, 255, 68));
+    AddDebugLine("Target", Color.white);
+    AddDebugLine("Lift", Color.yellow);
+  }
 
   private void HandleLineUpdates()
   {
-    UpdateMyVelocity();
-    UpdatetoTarget();
-    UpdateForward();
+    UpdateDebugLine("Forward", transform.position, transform.position + (transform.right * 3f));
+    UpdateDebugLine("Velocity", transform.position, transform.position + (Vector3)rb2d.velocity);
+    UpdateDebugLine("Target", transform.position, targetTransform.position);
   }
   private void UpdatePIDTerms()
   {
@@ -99,24 +90,23 @@ public class Missile : MonoBehaviour
     angularVelocityController.Ki = angularVelocityControllerKi;
     angularVelocityController.Kd = angularVelocityControllerKd;
 
-    rotationController.Kp = rotationControllerKp;
-    rotationController.Ki = rotationControllerKi;
-    rotationController.Kd = rotationControllerKd;
+    angleController.Kp = angleControllerKp;
+    angleController.Ki = angleControllerKi;
+    angleController.Kd = angleControllerKd;
   }
 
   private void FixedUpdate()
   {
     HandleTorque(Time.fixedDeltaTime);
+    HandleAoALift(Time.fixedDeltaTime);
+    HandleThrust(Time.fixedDeltaTime);
 
-    if (isThrusting)
+    //// clamp the velocity magnitude
+    float speed = rb2d.velocity.magnitude;
+    if (speed > maxSpeed)
     {
-      Thrust();
+      rb2d.velocity = rb2d.velocity.normalized * maxSpeed;
     }
-
-    // if the nose direction is different than the velocity, add some force perpendicular to the nose direction
-    alpha = Vector2.SignedAngle(rb2d.velocity, transform.right);
-    float testCorrection = 1 - Vector2.Dot(transform.right, rb2d.velocity.normalized);
-    rb2d.AddForce(transform.up * testCorrection * rb2d.velocity.magnitude);
   }
 
   private void HandleTorque(float deltaTime)
@@ -124,7 +114,7 @@ public class Missile : MonoBehaviour
     // get the rotationController output (rotation is just the rotation about z)
     float losToTarget = AngleMath.VectorAngle(targetTransform.position - transform.position);
     float angleError = Mathf.DeltaAngle(rb2d.rotation, losToTarget);
-    float torqueCorrectionForAngle = rotationController.GetOutput(angleError, deltaTime);
+    float torqueCorrectionForAngle = angleController.GetOutput(angleError, deltaTime);
 
     // los rate = (current - previous) / deltaTime. want this = 0;
     float currentLos = AngleMath.VectorAngle(targetTransform.position - transform.position);
@@ -139,54 +129,55 @@ public class Missile : MonoBehaviour
     rb2d.AddTorque(force);
   }
 
+  private void HandleAoALift(float deltaTime)
+  {
+    Vector2 liftForce = transform.up * CalcLiftMagnitude(CalcAlpha());
+    rb2d.AddForce(liftForce);
+  }
+  private void HandleThrust(float deltaTime)
+  {
+    rb2d.AddForce(transform.right * 2f);
+  }
+
   private void Thrust()
   {
     rb2d.AddForce(transform.right * 3f, ForceMode2D.Force);
   }
 
-  private void UpdateMyVelocity()
+  private float CalcAlpha()
   {
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + (Vector3)rb2d.velocity;
-    LineContainer.Instance.UpdateLine(myVelocityTag, start, end);
+    if (Vector2.Dot(transform.right, rb2d.velocity) > 0f)
+    {
+      return Vector2.SignedAngle(rb2d.velocity, transform.right);
+    }
+    else
+    {
+      return Vector2.SignedAngle(transform.right, Vector2.zero - rb2d.velocity);
+    }
   }
 
-  private void InitializeMyVelocity()
+  private float CalcLiftMagnitude(float alpha)
   {
-    Color myVelocityColor = new Color(0, 255, 68);
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + (Vector3)rb2d.velocity;
-    LineContainer.Instance.AddLine(myVelocityTag, start, end, 0.1f, myVelocityColor, redMaterial);
-  }
-  private void UpdatetoTarget()
-  {
-    Vector3 dirToTarget = (targetTransform.position - transform.position).normalized * 2f;
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + dirToTarget;
-    LineContainer.Instance.UpdateLine(toTargetTag, start, end);
+    float AreaFactor = 1f;
+    float liftForce = CoefficientOfLift(alpha) * AreaFactor * (rb2d.velocity.magnitude * rb2d.velocity.magnitude) / 2;
+    return liftForce;
   }
 
-  private void InitializetoTarget()
+  private float CoefficientOfLift(float alpha)
   {
-    Color toTargetColor = new Color(255, 255, 0);
-    Vector3 dirToTarget = (targetTransform.position - transform.position).normalized * 2f;
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + dirToTarget;
-    LineContainer.Instance.AddLine(toTargetTag, start, end, 0.1f, toTargetColor, pinkMaterial);
+    return alpha >= -20f && alpha <= 20f ? (alpha / 20) : alpha < 0 ? -0.5f : 0.5f;
   }
 
-  private void InitializeForward()
+  private void AddDebugLine(string name, Color color)
   {
-    Color toTargetColor = new Color(255, 0, 0);
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + (transform.right * 3f);
-    LineContainer.Instance.AddLine(forwardLineTag, start, end, 0.1f, toTargetColor, greenMaterial);
+    Material newMaterial = new Material(white);
+    newMaterial.color = color;
+
+    LineContainer.Instance.AddLine(name, Vector3.zero, Vector3.zero, 0.1f, newMaterial);
   }
 
-  private void UpdateForward()
+  private void UpdateDebugLine(string name, Vector3 start, Vector3 end)
   {
-    Vector3 start = transform.position;
-    Vector3 end = transform.position + (transform.right * 3f);
-    LineContainer.Instance.UpdateLine(forwardLineTag, start, end);
+    LineContainer.Instance.UpdateLine(name, start, end);
   }
 }

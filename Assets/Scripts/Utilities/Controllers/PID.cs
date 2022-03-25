@@ -19,4 +19,10 @@ public class PID
 
     return P * Kp + I * Ki + D * Kd;
   }
+
+  public void ResetIntegral()
+  {
+    I = 0f;
+  }
+
 }

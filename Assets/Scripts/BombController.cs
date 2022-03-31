@@ -15,10 +15,6 @@ public class BombController : MonoBehaviour
 
   public void SetVelocity(Vector2 velocity)
   {
-    if (rb2d == null)
-    {
-      Debug.Log("rigidbody is null?");
-    }
     rb2d.velocity = velocity;
   }
 

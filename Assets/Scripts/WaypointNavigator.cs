@@ -2,51 +2,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class WaypointNavigator : MonoBehaviour
 {
   private Rigidbody2D rb2d;
   private float targetSpeed;
 
   [SerializeField]
-  private Transform[] waypointsArray;
-  private Queue<Transform> waypointsQueue;
-  private Transform currentWaypoint;
+  private Vector2[] waypointsArray;
+  private Queue<Vector2> waypointsQueue;
+  private Vector2 currentWaypoint;
 
   public void SetTargetSpeed(float speed)
   {
     targetSpeed = speed;
   }
+
   public void SetRigidBody2d(Rigidbody2D rb2d)
   {
     this.rb2d = rb2d;
   }
 
-  void Start()
+  private void Awake()
   {
-    waypointsQueue = new Queue<Transform>();
-    foreach (Transform waypoint in waypointsArray)
+    rb2d = GetComponent<Rigidbody2D>();
+    waypointsQueue = new Queue<Vector2>();
+    foreach (Vector2 waypoint in waypointsArray)
     {
       waypointsQueue.Enqueue(waypoint);
     }
-    SetNextWaypoint();
+  }
+
+  private void Start()
+  {
+    StartNavigationToNextWaypoint();
   }
 
   void Update()
   {
-    float distanceToWaypoint = ((Vector2)currentWaypoint.position - rb2d.position).magnitude;
+    float distanceToWaypoint = (currentWaypoint - rb2d.position).magnitude;
     // if within some distance of current waypoint, set next waypoint as current
     if (distanceToWaypoint <= 0.5f)
     {
-      SetNextWaypoint();
+      StartNavigationToNextWaypoint();
     }
+  }
 
-    Vector2 vNorm = rb2d.velocity.normalized;
-    Vector2 dirToWaypoint = ((Vector2)currentWaypoint.position - rb2d.position).normalized;
+  private void StartNavigationToNextWaypoint()
+  {
+    SetNextWaypoint();
+    SetNewVelocity();
+  }
 
-    if (vNorm != dirToWaypoint)
-    {
-      rb2d.velocity = dirToWaypoint * targetSpeed;
-    }
+  private void SetNewVelocity()
+  {
+    Vector2 dirToWaypoint = (currentWaypoint - rb2d.position).normalized;
+    rb2d.velocity = dirToWaypoint * targetSpeed;
   }
 
   private void SetNextWaypoint()

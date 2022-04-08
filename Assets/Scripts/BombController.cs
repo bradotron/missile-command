@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class BombController : MonoBehaviour
 {
+  [SerializeField] private GameObject pfExplosion;
   private Rigidbody2D rb2d;
-  // Start is called before the first frame update
 
   private void Awake()
   {
@@ -18,14 +18,20 @@ public class BombController : MonoBehaviour
     rb2d.velocity = velocity;
   }
 
-  private void OnTriggerEnter2D(Collider2D collider2d)
+  // private void OnTriggerEnter2D(Collider2D collider2d)
+  // {
+  //   Explode();
+  // }
+
+  private void OnCollisionEnter2D(Collision2D collision)
   {
     Explode();
   }
 
   private void Explode()
   {
-    Debug.Log("Boom!");
+    Debug.Log("Explode");
+    Instantiate(pfExplosion, transform.position, Quaternion.identity);
     Destroy(gameObject);
   }
 }

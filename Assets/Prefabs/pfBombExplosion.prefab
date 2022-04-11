@@ -61,9 +61,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9c71f9711290640954bf10308354da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 0}
   startScale: 0
-  endScale: 8
-  explosionTime: 4
+  endScale: 3
+  explosionTime: 1
 --- !u!1 &845164455369174603
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,9 +16,7 @@ public class RocketController : MonoBehaviour
 
   private void Start()
   {
-    Vector2 velocity = (targetPosition - (Vector2)transform.position).normalized * missileData.speed;
-    rb2d.velocity = velocity;
-
+    rb2d.velocity = transform.right * missileData.speed;
   }
 
   private void Update()
@@ -26,7 +24,6 @@ public class RocketController : MonoBehaviour
     Vector2 toTarget = targetPosition - (Vector2)transform.position;
     if (toTarget.magnitude < 0.1)
     {
-      Debug.Log("Boom!");
       Destroy(gameObject);
     }
   }

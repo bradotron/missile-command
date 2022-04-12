@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class MissileLauncherController : MonoBehaviour
 {
-  private Vector2 launchPoint;
   private Transform launcherTransform;
+  private Transform launchPointTransform;
   [SerializeField] private GameObject missilePrefab;
 
   private void Awake()
   {
     launcherTransform = transform.Find("Launcher");
-    launchPoint = launcherTransform.Find("LaunchPoint").position;
-    Debug.Log(launchPoint);
+    launchPointTransform = launcherTransform.Find("LaunchPoint");
   }
 
   void Start()
@@ -33,7 +32,7 @@ public class MissileLauncherController : MonoBehaviour
 
   private void Fire()
   {
-    GameObject missile = Instantiate(missilePrefab, launchPoint, Quaternion.identity);
+    GameObject missile = Instantiate(missilePrefab, launchPointTransform.position, launcherTransform.rotation);
     missile.GetComponent<RocketController>().SetTarget(MousePositionTracker.Instance.GetMouseWorldPosition());
   }
 

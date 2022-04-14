@@ -7,31 +7,46 @@ public class HealthSystem : MonoBehaviour
 {
   private int currentHealth;
   [SerializeField] private int maxHealth;
-  private Dictionary<DamageType, float> damageVulnerabilities;
+  [SerializeField] private List<Damage> damageResistances;
+  private Dictionary<DamageType, float> damageResistanceDictionary;
 
   public event EventHandler OnDied;
 
   private void Awake()
   {
     currentHealth = maxHealth;
-  }
-
-  public void SetDamageVulnerabilities(Dictionary<DamageType, float> vulnerabilities)
-  {
-    damageVulnerabilities = vulnerabilities;
+    damageResistanceDictionary = new Dictionary<DamageType, float>();
+    foreach (Damage damage in damageResistances)
+    {
+      if (damage.amount <= 0f || damage.amount >= 1f)
+      {
+        damageResistanceDictionary.Add(damage.damageType, damage.amount);
+      }
+      else
+      {
+        Debug.LogError("a damage resistance amount must be between 0 and 1");
+      }
+    }
   }
 
   public void Damage(Damage damage)
   {
-    if (damageVulnerabilities.ContainsKey(damage.damageType))
+    if (damageResistanceDictionary.ContainsKey(damage.damageType))
     {
-      currentHealth -= Mathf.RoundToInt(damage.amount * damageVulnerabilities[damage.damageType]);
-      currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+      // take mitigated damage
+      currentHealth -= Mathf.RoundToInt(damage.amount * damageResistanceDictionary[damage.damageType]);
+    }
+    else
+    {
+      // take full damage
+      currentHealth -= Mathf.RoundToInt(damage.amount);
+    }
 
-      if (IsDead())
-      {
-        OnDied?.Invoke(this, EventArgs.Empty);
-      }
+    currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+    if (IsDead())
+    {
+      OnDied?.Invoke(this, EventArgs.Empty);
     }
   }
 

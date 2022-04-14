@@ -20,7 +20,6 @@ public class BombController : MonoBehaviour
     healthSystem = GetComponent<HealthSystem>();
     Dictionary<DamageType, float> vulnerabilities = new Dictionary<DamageType, float>();
     vulnerabilities.Add(DamageType.Explosive, 1f);
-    healthSystem.SetDamageVulnerabilities(vulnerabilities);
     healthSystem.OnDied += HealthSystem_OnDied;
   }
 

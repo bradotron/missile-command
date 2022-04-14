@@ -6,7 +6,8 @@ public class MissileLauncherController : MonoBehaviour
 {
   private Transform launcherTransform;
   private Transform launchPointTransform;
-  [SerializeField] private GameObject missilePrefab;
+  [SerializeField] private GameObject rocketPrefab;
+  [SerializeField] private GameObject rocketTargetPrefab;
 
   private void Awake()
   {
@@ -14,12 +15,6 @@ public class MissileLauncherController : MonoBehaviour
     launchPointTransform = launcherTransform.Find("LaunchPoint");
   }
 
-  void Start()
-  {
-
-  }
-
-  // Update is called once per frame
   void Update()
   {
     if (Input.GetMouseButtonDown(0))
@@ -32,8 +27,9 @@ public class MissileLauncherController : MonoBehaviour
 
   private void Fire()
   {
-    GameObject missile = Instantiate(missilePrefab, launchPointTransform.position, launcherTransform.rotation);
-    missile.GetComponent<RocketController>().SetTarget(MousePositionTracker.Instance.GetMouseWorldPosition());
+    GameObject target = Instantiate(rocketTargetPrefab, MousePositionTracker.Instance.GetMouseWorldPosition(), Quaternion.identity);
+    GameObject missile = Instantiate(rocketPrefab, launchPointTransform.position, launcherTransform.rotation);
+    missile.GetComponent<RocketController>().SetTarget(target);
   }
 
   private void HandleLauncherRotation()

@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 8217917356188107988}
   - component: {fileID: 8217917356188107989}
   - component: {fileID: 2085861959395428073}
+  - component: {fileID: 2309838233494285571}
   m_Layer: 0
   m_Name: pfBomb
   m_TagString: Untagged
@@ -166,3 +167,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pfExplosion: {fileID: 845164454947255242, guid: bb1e29dffd1001442885460646496fb3, type: 3}
+--- !u!114 &2309838233494285571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8217917356188107990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b9aa3a4a6caa844b4d2973dc0fabd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1

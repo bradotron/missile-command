@@ -843,6 +843,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4760778149683993506, guid: f2989b15f05bade4c867e2c01a9bcdab, type: 3}
+      propertyPath: bombSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4760778149683993507, guid: f2989b15f05bade4c867e2c01a9bcdab, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -905,9 +909,17 @@ PrefabInstance:
       value: MissileLauncher
       objectReference: {fileID: 0}
     - target: {fileID: 6940217672158363181, guid: 088de6ccd69ef744dbf01f5993cced18, type: 3}
+      propertyPath: rocketPrefab
+      value: 
+      objectReference: {fileID: 4180329714688799699, guid: b5188953997db1b4babada6493728d74, type: 3}
+    - target: {fileID: 6940217672158363181, guid: 088de6ccd69ef744dbf01f5993cced18, type: 3}
       propertyPath: missilePrefab
       value: 
       objectReference: {fileID: 4180329714688799699, guid: b5188953997db1b4babada6493728d74, type: 3}
+    - target: {fileID: 6940217672158363181, guid: 088de6ccd69ef744dbf01f5993cced18, type: 3}
+      propertyPath: rocketTargetPrefab
+      value: 
+      objectReference: {fileID: 608185354282162512, guid: 167e8a719786faa488571be270fd5f88, type: 3}
     - target: {fileID: 6940217672158363182, guid: 088de6ccd69ef744dbf01f5993cced18, type: 3}
       propertyPath: m_RootOrder
       value: 4

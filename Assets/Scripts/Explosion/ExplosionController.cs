@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ExplosionController : MonoBehaviour
 {
-  [SerializeField] private ExplosionSO explosion;
   [SerializeField] private float startScale = 0f;
   [SerializeField] private float endScale = 2f;
   [SerializeField] private float explosionTime = 1f;
@@ -28,6 +27,9 @@ public class ExplosionController : MonoBehaviour
 
   void OnTriggerEnter2D(Collider2D col)
   {
-    Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
+    if (col.gameObject.TryGetComponent<HealthSystem>(out HealthSystem healthSystem))
+    {
+      healthSystem.Damage(new Damage() { damageType = DamageType.Explosive, amount = 1f });
+    }
   }
 }

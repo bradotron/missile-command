@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 845164454947255247}
   - component: {fileID: 349306863773659586}
   m_Layer: 0
-  m_Name: pfBombExplosion
+  m_Name: pfRocketExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,8 +63,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 0}
   startScale: 0
-  endScale: 2
-  explosionTime: 0.5
+  endScale: 3
+  explosionTime: 1
 --- !u!1 &845164455369174603
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class TargetCursor : MonoBehaviour
 {
+  private Camera main;
+
+  private void Start()
+  {
+    main = Camera.main;
+  }
   void Update()
   {
-    transform.position = MousePositionTracker.Instance.GetMouseWorldPosition();
+    Vector3 newPosition = main.ScreenToWorldPoint(Input.mousePosition);
+    newPosition.z = 0;
+    transform.position = newPosition;
   }
 }

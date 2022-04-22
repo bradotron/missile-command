@@ -2,30 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MousePositionTracker
+public class MousePositionTracker : MonoBehaviour
 {
-  private Camera mainCamera;
+  public Camera mainCamera;
+  public Vector3 mousePosition { get; private set; }
 
-  private static MousePositionTracker instance;
-  public static MousePositionTracker Instance
+  private void Update()
   {
-    get
-    {
-      if (instance == null)
-      {
-        instance = new MousePositionTracker();
-        instance.SetMainCamera();
-      }
-      return instance;
-    }
-  }
-
-  private void SetMainCamera()
-  {
-    if (mainCamera == null)
-    {
-      mainCamera = Camera.main;
-    }
+    mousePosition = GetMouseWorldPosition();
   }
 
   public Vector3 GetMouseWorldPosition()

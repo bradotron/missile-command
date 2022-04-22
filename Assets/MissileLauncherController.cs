@@ -6,6 +6,7 @@ public class MissileLauncherController : MonoBehaviour
 {
   private Transform launcherTransform;
   private Transform launchPointTransform;
+  public MousePositionTracker mousePositionTracker;
   [SerializeField] private GameObject rocketPrefab;
   [SerializeField] private GameObject rocketTargetPrefab;
 
@@ -27,14 +28,14 @@ public class MissileLauncherController : MonoBehaviour
 
   private void Fire()
   {
-    GameObject target = Instantiate(rocketTargetPrefab, MousePositionTracker.Instance.GetMouseWorldPosition(), Quaternion.identity);
+    GameObject target = Instantiate(rocketTargetPrefab, mousePositionTracker.GetMouseWorldPosition(), Quaternion.identity);
     GameObject missile = Instantiate(rocketPrefab, launchPointTransform.position, launcherTransform.rotation);
     missile.GetComponent<RocketController>().SetTarget(target);
   }
 
   private void HandleLauncherRotation()
   {
-    Vector3 mouseWorldPosition = MousePositionTracker.Instance.GetMouseWorldPosition();
+    Vector3 mouseWorldPosition = mousePositionTracker.GetMouseWorldPosition();
     float angleDeg = AngleMath.VectorAngle(mouseWorldPosition - launcherTransform.position);
     launcherTransform.eulerAngles = new Vector3(0, 0, angleDeg);
   }

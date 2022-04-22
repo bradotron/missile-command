@@ -9,8 +9,6 @@ public class BaseReferenceDrawer : PropertyDrawer
 
   public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
   {
-    base.OnGUI(position, property, label);
-
     if (popupStyle == null)
     {
       popupStyle = new GUIStyle(GUI.skin.GetStyle("PaneOptions"));

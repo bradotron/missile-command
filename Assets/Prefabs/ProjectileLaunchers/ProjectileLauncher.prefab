@@ -162,7 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81286362a463ebf4f87e71d2f26958c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireKey: 32
   launcherData:
     ReloadTime:
       Variable: {fileID: 11400000, guid: 7d2b9c308b6d6d74bb07717f59ba9ffe, type: 2}
@@ -177,6 +176,7 @@ MonoBehaviour:
       IsConstant: 0
       ConstantValue: 0
   aimingBrain: {fileID: 11400000, guid: 0dcce9a9c748187488476b1bf4a530a5, type: 2}
+  shootingBrain: {fileID: 11400000, guid: b563d665d57208c4c847734216c6ef3d, type: 2}
 --- !u!50 &2133904040924947298
 Rigidbody2D:
   serializedVersion: 4

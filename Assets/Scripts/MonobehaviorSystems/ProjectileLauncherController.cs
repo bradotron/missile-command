@@ -8,6 +8,8 @@ public class ProjectileLauncherController : MonoBehaviour
   public BaseBrain aimingBrain;
   public BaseBrain shootingBrain;
 
+  public BaseProjectile selectedProjectile;
+  public Transform projectileSpawnPoint;
 
   private void Start()
   {

@@ -42,7 +42,10 @@ public class HumanControlledShootingBrain : BaseBrain
     {
       if (isFiring)
       {
-        Debug.Log("Fire!");
+        Transform projectile = Instantiate(launcherController.selectedProjectile.prefab, launcherController.projectileSpawnPoint.position, launcherController.transform.rotation);
+        Rigidbody2D projectileRb2d = projectile.GetComponent<Rigidbody2D>();
+        projectileRb2d.AddForce(projectile.transform.right * launcherController.selectedProjectile.projectileData.launchForce);
+        
         isLoaded = false;
         timeUntilLoaded = launcherData.ReloadTime.Value;
       }

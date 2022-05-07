@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ProjectileLauncherController : MonoBehaviour
 {
-  public ProjectileLauncherData launcherData;
+  public AbstractProjectileLauncherData launcherData;
   public BaseBrain aimingBrain;
   public BaseBrain shootingBrain;
 
-  public BaseProjectile selectedProjectile;
+  public Projectile selectedProjectile;
   public Transform projectileSpawnPoint;
 
   private void Start()

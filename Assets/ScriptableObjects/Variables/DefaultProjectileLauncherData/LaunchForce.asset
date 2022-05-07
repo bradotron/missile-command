@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24517980d6213984ea92d57a1fe6d783, type: 3}
-  m_Name: CurrentMousePosition
+  m_Script: {fileID: 11500000, guid: d66883134b2b776498cec6570861cff3, type: 3}
+  m_Name: LaunchForce
   m_EditorClassIdentifier: 
-  Value: {x: 0, y: 0}
+  Value: 300

@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 5641204744585357009}
   - component: {fileID: 2133904040924947298}
   m_Layer: 0
-  m_Name: ProjectileLauncher
+  m_Name: DefaultGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

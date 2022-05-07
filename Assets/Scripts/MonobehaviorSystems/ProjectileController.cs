@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-  public BaseProjectile projectile;
+  public Projectile projectile;
   private float timeToExpire;
   // Start is called before the first frame update
   void Start()
   {
     // projectile initial velocity comes from launcher or from self???
-    timeToExpire = projectile.projectileData.maxFlightTime;
+    timeToExpire = projectile.ProjectileData.MaxFlightTime;
   }
 
   private void Update()

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Projectile/Dumb Projectile")]
-public class DumbProjectile : BaseProjectile
+[CreateAssetMenu(menuName = "Projectile/Default Projectile")]
+public class DefaultProjectile : Projectile
 {
+  public new DefaultProjectileData ProjectileData;
   public override void OnExpired(GameObject self)
   {
     Destroy(self);

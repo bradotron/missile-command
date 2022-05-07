@@ -7,7 +7,7 @@ public class HumanControlledShootingBrain : BaseBrain
 {
   public KeyBindingReference FireKeyBindingReference;
 
-  private ProjectileLauncherData launcherData;
+  private AbstractProjectileLauncherData launcherData;
   private bool isLoaded = true;
   private bool isFiring = false;
   private float timeUntilLoaded = 0f;
@@ -42,9 +42,11 @@ public class HumanControlledShootingBrain : BaseBrain
     {
       if (isFiring)
       {
-        Transform projectile = Instantiate(launcherController.selectedProjectile.prefab, launcherController.projectileSpawnPoint.position, launcherController.transform.rotation);
-        Rigidbody2D projectileRb2d = projectile.GetComponent<Rigidbody2D>();
-        projectileRb2d.AddForce(projectile.transform.right * launcherController.selectedProjectile.projectileData.launchForce);
+        // fire an event...OnFire or something
+        // then in the projectilelaunchercontroller connect that event to a handler, the handler will connect to the ProjectileLauncher.Fire (this doesn't exist yet, create a SO and add it)
+        // Transform projectile = Instantiate(launcherController.selectedProjectile.prefab, launcherController.projectileSpawnPoint.position, launcherController.transform.rotation);
+        // Rigidbody2D projectileRb2d = projectile.GetComponent<Rigidbody2D>();
+        // projectileRb2d.AddForce(projectile.transform.right * launcherController.selectedProjectile.ProjectileData.launchForce);
         
         isLoaded = false;
         timeUntilLoaded = launcherData.ReloadTime.Value;
